@@ -1,0 +1,20 @@
+hook-00	Siang yang panas. Kamu memasukkan es batu ke segelas air dingin.
+hook-01	Esnya tidak tenggelam. Ia malah mengapung di permukaan.
+hook-02	Padahal es dan air itu zat yang sama. Kok bisa beda?
+lilin-00	Kebanyakan zat justru sebaliknya. Lilin padat tenggelam di dalam lilin cair.
+lilin-01	Saat membeku, partikelnya merapat, jadi bentuk padatnya lebih berat untuk ukuran yang sama.
+lilin-02	Air melanggar aturan ini. Rahasianya ada di dalam molekulnya.
+molekul-00	Satu molekul air terdiri dari satu atom oksigen dan dua atom hidrogen, membentuk huruf fe.
+molekul-01	Sisi oksigen sedikit negatif, sisi hidrogen sedikit positif. Jadi mereka saling tarik.
+molekul-02	Di air cair, molekul-molekul ini berdesakan, bergandengan lalu melepas, terus-menerus.
+beku-00	Saat suhu turun, gerakan mereka melambat, dan gandengannya makin erat. Namanya ikatan hidrogen.
+beku-01	Setiap molekul menggandeng empat tetangga, menyusun pola segi enam yang renggang.
+beku-02	Pola ini menyisakan banyak ruang kosong. Akibatnya, es kira-kira sembilan persen lebih mengembang daripada air.
+angka-00	Hasilnya, satu sentimeter kubik air bermassa sekitar satu gram, sedangkan es hanya sekitar nol koma sembilan dua gram.
+angka-01	Benda yang massa jenisnya lebih kecil akan mengapung. Itulah sebabnya es selalu naik ke atas.
+angka-02	Dan karena bedanya tipis, sebagian besar es tetap terendam. Pada gunung es, kira-kira sembilan per sepuluhnya tersembunyi di bawah laut.
+danau-00	Sifat aneh ini menyelamatkan kehidupan di negeri bermusim dingin.
+danau-01	Danau membeku dari atas. Lapisan es menjadi selimut yang menahan dingin.
+danau-02	Di bawahnya, air tetap cair, sekitar empat derajat Selsius, dan ikan tetap bisa berenang.
+penutup-00	Jadi, lain kali kamu melihat es mengapung di minumanmu,
+penutup-01	ingatlah: itu jutaan molekul air yang sedang bergandengan tangan.
