@@ -1,18 +1,24 @@
 import type React from 'react';
-import {Angka} from './Angka';
-import {Beku} from './Beku';
-import {Danau} from './Danau';
-import {Hook} from './Hook';
-import {Lilin} from './Lilin';
-import {Molekul} from './Molekul';
-import {Penutup} from './Penutup';
+import {Andai} from './Andai';
+import {Aneh} from './Aneh';
+import {Angka, Gunung} from './Angka';
+import {Dansa} from './Beku';
+import {Botol} from './Botol';
+import {Selamat} from './Danau';
+import {Es} from './Es';
+import {Kenalan, Konser} from './Molekul';
+import {Tutup} from './Penutup';
 
 export const SCENES: Record<string, React.FC> = {
-  hook: Hook,
-  lilin: Lilin,
-  molekul: Molekul,
-  beku: Beku,
+  es: Es,
+  aneh: Aneh,
+  andai: Andai,
+  kenalan: Kenalan,
+  konser: Konser,
+  dansa: Dansa,
+  botol: Botol,
   angka: Angka,
-  danau: Danau,
-  penutup: Penutup,
+  gunung: Gunung,
+  selamat: Selamat,
+  tutup: Tutup,
 };

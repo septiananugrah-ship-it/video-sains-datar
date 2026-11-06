@@ -1,7 +1,7 @@
 import React from 'react';
 import {AbsoluteFill} from 'remotion';
 import {EASE_IN_OUT, mix, ramp} from '../anim';
-import {BigTitle, Bubble, Bubbles, Glass, IceCube, Kid, Stage, drift} from '../components/flat';
+import {Bubble, Bubbles, Glass, IceCube, Kid, Stage, drift} from '../components/flat';
 import {Kitchen} from '../components/sets';
 import {useScene} from '../SceneContext';
 import {C} from '../theme';
@@ -27,19 +27,18 @@ const icePos = (t: number, t0: number) => {
   return {x: G.x - 6 + 6 * Math.sin(u * 1.3) * Math.min(1, u), y: FLOAT_Y + dip + 3 * Math.sin(u * 2.1), rot: 40 + 8 * Math.sin(u * 1.7) * Math.exp(-0.5 * u), inGlass: true, splash: u};
 };
 
-export const Hook: React.FC = () => {
-  const {t, cue, cueEnd} = useScene();
-  const t0 = cue(0) + 2.2;
+export const Es: React.FC = () => {
+  const {t, cue, wordOf} = useScene();
+  // es dilepas tepat saat kata "dicemplungkan"
+  const t0 = wordOf(1, 'cemplung') - 0.15;
   const ice = icePos(t, t0);
   // kamera: lebar → mendorong ke gelas saat pertanyaan muncul
-  const c1 = drift(t, cue(2), {s: 1.0, x: 0, y: 0}, {s: 1.08, x: 40, y: 0});
-  const push = ramp(t, cue(2) - 0.2, cue(2) + 2.2, EASE_IN_OUT);
+  const c1 = drift(t, t0, {s: 1.0, x: 0, y: 0}, {s: 1.06, x: 30, y: 0});
+  const push = ramp(t, wordOf(1, 'mengapung') - 0.3, wordOf(1, 'mengapung') + 1.6, EASE_IN_OUT);
   const cam = {s: mix(c1.s, 1.45, push), x: mix(c1.x, G.x - 960 - 60, push), y: mix(c1.y, SURF - 540 + 40, push)};
-  const wow = ramp(t, cue(1) + 0.1, cue(1) + 0.6);
-  const think = ramp(t, cue(2) + 0.6, cue(2) + 1.2);
-  const armR = t < t0 ? mix(10, 132, ramp(t, cue(0) + 0.5, cue(0) + 1.7)) : mix(132, 20, ramp(t, t0 + 0.3, t0 + 1.3));
-  const titleP = ramp(t, cueEnd(2) + 0.25, cueEnd(2) + 1.1);
-  const dim = ramp(t, cueEnd(2) + 0.1, cueEnd(2) + 0.7);
+  const wow = ramp(t, t0 + 1.2, t0 + 1.6);
+  const think = 0;
+  const armR = t < t0 ? mix(10, 132, ramp(t, cue(0) + 0.3, Math.min(t0 - 0.2, cue(0) + 1.6))) : mix(132, 20, ramp(t, t0 + 0.3, t0 + 1.3));
   const splash = ice.splash;
   return (
     <AbsoluteFill>
@@ -89,10 +88,9 @@ export const Hook: React.FC = () => {
               })
             : null}
         </Kitchen>
-        <Bubble x={420} y={300} text={'LHO,\nNGAMBANG?'} p={ramp(t, cue(1) + 0.5, cue(1) + 0.9) * (1 - ramp(t, cue(2) + 0.2, cue(2) + 0.5))} tail="right" w={330} />
-        <rect x={0} y={0} width={1920} height={1080} fill={C.ink} opacity={0.35 * dim} />
+        <Bubble x={1380} y={330} text="PLUNG!" p={ramp(t, t0 + 0.6, t0 + 0.9) * (1 - ramp(t, t0 + 1.7, t0 + 2.0))} tail="left" w={260} size={48} />
+        <Bubble x={420} y={300} text={'LHO,\nNGAMBANG?'} p={ramp(t, t0 + 2.1, t0 + 2.5)} tail="right" w={330} />
       </Stage>
-      <BigTitle p={titleP} lines={['Kenapa Es Batu', 'Mengapung?']} sub="padahal sama-sama air" />
     </AbsoluteFill>
   );
 };

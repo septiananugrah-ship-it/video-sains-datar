@@ -12,9 +12,9 @@ export const lineKey = (sceneId: string, index: number) => `${sceneId}-${String(
 
 export const FPS = 30;
 
-// Kecepatan baca narator edukasi yang tenang: ~5,3 suku kata per detik
+// Kecepatan baca narator explainer yang lincah: ~5,8 suku kata per detik
 // (sekitar 115-125 kata per menit untuk bahasa Indonesia).
-export const SYLLABLES_PER_SECOND = 5.3;
+export const SYLLABLES_PER_SECOND = 5.8;
 const DEFAULT_PAUSE = 0.6;
 const DEFAULT_LEAD = 1.0;
 const DEFAULT_TAIL = 1.4;

@@ -1,7 +1,7 @@
 import React from 'react';
 import {AbsoluteFill} from 'remotion';
-import {EASE_IN_OUT, mix, ramp} from '../anim';
-import {HBond, Stage, Tag, WaterMol} from '../components/flat';
+import {BACK, mix, ramp} from '../anim';
+import {Bubble, HBond, Stage, Tag, WaterMol} from '../components/flat';
 import {CX, CY, LIQUID, MOL_R, hPoints, liquidPos} from '../components/mols';
 import {useScene} from '../SceneContext';
 import {C, FONT} from '../theme';
@@ -30,13 +30,18 @@ const K1 = LIQUID.reduce(
   -1,
 );
 
-export const Molekul: React.FC = () => {
+/**
+ * mode 'kenalan': satu molekul besar (baris 0 muncul, baris 1 bentuk V, baris 2 muatan + tarik-menarik).
+ * mode 'konser' : kerumunan molekul cair yang berdesakan (analogi penonton konser).
+ */
+const MolScene: React.FC<{mode: 'kenalan' | 'konser'}> = ({mode}) => {
   const {t, cue} = useScene();
-  const out = ramp(t, cue(2) - 0.2, cue(2) + 2.0, EASE_IN_OUT); // zoom keluar ke kerumunan
-  const S = mix(3.4, 1, out);
-  const two = ramp(t, cue(1) + 0.9, cue(1) + 1.6);
-  const charges = ramp(t, cue(1) + 0.1, cue(1) + 0.7) * (1 - out);
-  const amp = mix(0.15, 1, out);
+  const crowd = mode === 'konser';
+  const out = crowd ? 1 : 0;
+  const S = mix(3.4, 1, out) * (crowd ? 1 : mix(0.6, 1, ramp(t, cue(0) + 0.2, cue(0) + 1.0, BACK)));
+  const two = crowd ? 1 : ramp(t, cue(2) + 1.0, cue(2) + 1.7);
+  const charges = crowd ? 0 : ramp(t, cue(2) + 0.1, cue(2) + 0.7);
+  const amp = crowd ? 1.25 : 0.15;
   const pos = LIQUID.map((_, k) => liquidPos(k, t, amp));
   // molekul kedua mengarahkan satu H ke O molekul pertama (ikatan hidrogen pertama)
   const p0 = pos[K0];
@@ -72,8 +77,9 @@ export const Molekul: React.FC = () => {
   });
   const tagO = tr(pos[K0].x, pos[K0].y);
   const hs0 = hPoints(pos[K0].x, pos[K0].y, pos[K0].rot).map((h) => tr(h.x, h.y));
-  const tagsP = ramp(t, cue(0) + 0.8, cue(0) + 1.4) * (1 - ramp(t, cue(1) - 0.3, cue(1) + 0.1));
-  const vP = ramp(t, cue(0) + 2.4, cue(0) + 3.0) * (1 - ramp(t, cue(1) - 0.3, cue(1) + 0.1));
+  const tagsP = crowd ? 0 : ramp(t, cue(1) + 0.2, cue(1) + 0.8) * (1 - ramp(t, cue(2) - 0.3, cue(2) + 0.1));
+  const vP = crowd ? 0 : ramp(t, cue(1) + 1.6, cue(1) + 2.2) * (1 - ramp(t, cue(2) - 0.3, cue(2) + 0.1));
+  const hello = crowd ? 0 : ramp(t, cue(0) + 1.0, cue(0) + 1.4) * (1 - ramp(t, cue(1) - 0.3, cue(1)));
   return (
     <AbsoluteFill>
       <Stage>
@@ -109,9 +115,31 @@ export const Molekul: React.FC = () => {
             bentuk V · 104,5°
           </text>
         </g>
-        <Tag x={960} y={150} text="tarik-menarik = ikatan hidrogen (garis kuning)" o={ramp(t, cue(1) + 1.6, cue(1) + 2.2) * (1 - out)} size={34} />
-        <Tag x={960} y={110} text="air cair: berdesakan & terus bergerak" o={ramp(t, cue(2) + 1.6, cue(2) + 2.3)} size={36} />
+        <Tag x={960} y={150} text="tarik-menarik = ikatan hidrogen (garis kuning)" o={crowd ? 0 : ramp(t, cue(2) + 1.6, cue(2) + 2.2)} size={34} />
+        <Bubble x={tagO.x + 260} y={tagO.y - 200} text="HALO!" p={hello} tail="left" w={230} size={46} />
+        {crowd ? (
+          <g>
+            {/* lampu panggung & not musik: suasana konser */}
+            {[0, 1, 2].map((i) => {
+              const sw = 14 * Math.sin(t * 0.9 + i * 2.1);
+              return <path key={i} d={`M${460 + i * 500},-20 L${360 + i * 500 + sw * 6},1080 L${560 + i * 500 + sw * 6},1080 Z`} fill={[C.yellow, C.pink, C.shirt][i]} opacity={0.16} />;
+            })}
+            {Array.from({length: 7}, (_, i) => {
+              const ph = (t * 0.25 + i / 7) % 1;
+              return (
+                <text key={i} x={180 + i * 260 + 30 * Math.sin(t + i)} y={mix(980, 160, ph)} fontFamily={FONT.sans} fontWeight={800} fontSize={58} fill={[C.purple, C.pink, C.orange][i % 3]} opacity={Math.min(1, ph * 6) * (1 - ph)} textAnchor="middle">
+                  {i % 2 ? '♪' : '♫'}
+                </text>
+              );
+            })}
+            <Tag x={960} y={110} text="air cair = penonton konser: desak-desakan" o={ramp(t, cue(0) + 0.5, cue(0) + 1.1)} size={36} />
+            <Tag x={960} y={185} text="gandengan sebentar, lalu lepas lagi" color={C.shirt2} o={ramp(t, cue(1) + 0.6, cue(1) + 1.2)} size={30} />
+          </g>
+        ) : null}
       </Stage>
     </AbsoluteFill>
   );
 };
+
+export const Kenalan: React.FC = () => <MolScene mode="kenalan" />;
+export const Konser: React.FC = () => <MolScene mode="konser" />;

@@ -47,15 +47,16 @@ const WIPE_COLORS = [
   [C.purple, C.green, C.orange],
 ];
 
-/** Sapuan tiga panel warna pastel (kanan → kiri) di setiap pergantian adegan. */
+/** Sapuan tiga panel warna pastel (kanan → kiri) di pergantian babak (adegan bertanda trans: 'wipe'); selebihnya potong langsung. */
 const Wipe: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const t = frame / fps;
-  const k = TIMELINE.scenes.slice(1).findIndex((s) => Math.abs(t - s.start) < WIPE / 2 + 0.25);
+  const k = TIMELINE.scenes.slice(1).findIndex((s) => s.trans === 'wipe' && Math.abs(t - s.start) < WIPE / 2 + 0.25);
   if (k < 0) return null;
   const b = TIMELINE.scenes[k + 1].start;
-  const cols = WIPE_COLORS[k % WIPE_COLORS.length];
+  const nth = TIMELINE.scenes.slice(1, k + 2).filter((s) => s.trans === 'wipe').length - 1;
+  const cols = WIPE_COLORS[nth % WIPE_COLORS.length];
   return (
     <AbsoluteFill style={{pointerEvents: 'none', overflow: 'hidden'}}>
       {cols.map((col, i) => {

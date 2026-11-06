@@ -149,11 +149,24 @@ export const Lab: React.FC<{cam: Cam; t: number; children?: React.ReactNode}> = 
 );
 
 /** Danau musim dingin dalam penampang: salju, es di atas, air cair di bawah, ikan berenang. */
-export const Lake: React.FC<{cam: Cam; t: number; ice: number; children?: React.ReactNode; iceY?: number}> = ({cam, t, ice, children, iceY = 520}) => {
+export const LAKE_FISH_Y = [760, 880, 960];
+/**
+ * bottomIce = tebal es yang menumpuk dari dasar (px, skenario "andai es tenggelam").
+ * fishTime(i) = waktu efektif ikan ke-i (berhenti bergerak saat terperangkap es).
+ */
+export const Lake: React.FC<{cam: Cam; t: number; ice: number; children?: React.ReactNode; iceY?: number; bottomIce?: number; fishTime?: (i: number) => number}> = ({
+  cam,
+  t,
+  ice,
+  children,
+  iceY = 520,
+  bottomIce = 0,
+  fishTime,
+}) => {
   const fish = [
-    {y: 760, sp: 60, ph: 0, c: C.orange, s: 1},
-    {y: 880, sp: -45, ph: 700, c: C.pink, s: 0.8},
-    {y: 960, sp: 38, ph: 1300, c: C.yellow, s: 0.9},
+    {y: LAKE_FISH_Y[0], sp: 60, ph: 0, c: C.orange, s: 1},
+    {y: LAKE_FISH_Y[1], sp: -45, ph: 700, c: C.pink, s: 0.8},
+    {y: LAKE_FISH_Y[2], sp: 38, ph: 1300, c: C.yellow, s: 0.9},
   ];
   return (
     <>
@@ -192,17 +205,28 @@ export const Lake: React.FC<{cam: Cam; t: number; ice: number; children?: React.
         {/* ikan */}
         {fish.map((f, i) => {
           const span = 2400;
-          const xx = (((f.ph + t * f.sp) % span) + span) % span - 240;
+          const ft = fishTime ? fishTime(i) : t;
+          const xx = (((f.ph + ft * f.sp) % span) + span) % span - 240;
           const dir = f.sp > 0 ? 1 : -1;
           return (
-            <g key={i} transform={`translate(${xx} ${f.y + 10 * Math.sin(t * 1.5 + i)}) scale(${dir * f.s} ${f.s})`}>
+            <g key={i} transform={`translate(${xx} ${f.y + 10 * Math.sin(ft * 1.5 + i)}) scale(${dir * f.s} ${f.s})`}>
               <ellipse cx={0} cy={0} rx={60} ry={32} fill={f.c} />
-              <path d={`M-50,0 L-96,${-26 + 6 * Math.sin(t * 8 + i)} L-96,${26 + 6 * Math.sin(t * 8 + i)} Z`} fill={shade(f.c, -0.15)} />
+              <path d={`M-50,0 L-96,${-26 + 6 * Math.sin(ft * 8 + i)} L-96,${26 + 6 * Math.sin(ft * 8 + i)} Z`} fill={shade(f.c, -0.15)} />
               <circle cx={30} cy={-8} r={7} fill={C.ink} />
               <path d="M-10,-30 Q4,-48 20,-30" fill={shade(f.c, -0.12)} />
             </g>
           );
         })}
+        {/* es yang menumpuk dari dasar (skenario andai) */}
+        {bottomIce > 0.5 ? (
+          <g>
+            <rect x={-300} y={1050 - bottomIce} width={2520} height={bottomIce + 500} fill={C.ice2} opacity={0.88} />
+            <rect x={-300} y={1050 - bottomIce} width={2520} height={12} fill="#fff" opacity={0.85} />
+            {Array.from({length: Math.floor(bottomIce / 90)}, (_, k) => (
+              <line key={k} x1={-300} y1={1050 - (k + 1) * 90} x2={2220} y2={1050 - (k + 1) * 90} stroke="#fff" strokeWidth={4} strokeDasharray="60 30" opacity={0.6} />
+            ))}
+          </g>
+        ) : null}
         {/* lapisan es di permukaan */}
         <g opacity={ice}>
           <rect x={-300} y={iceY - 6} width={2520} height={70} fill={C.ice2} />

@@ -48,10 +48,13 @@ const BERG_DY = (() => {
   return (lo + hi) / 2;
 })();
 
-export const Angka: React.FC = () => {
+/** mode 'massa': timbangan (baris 0) → es naik di gelas (baris 1). mode 'gunung': gunung es (baris 0). */
+const AngkaScene: React.FC<{mode: 'massa' | 'gunung'}> = ({mode}) => {
   const {t, cue, dur} = useScene();
-  const aOut = ramp(t, cue(1) - 0.35, cue(1) + 0.05, EASE_IN_OUT);
-  const bOut = ramp(t, cue(2) - 0.35, cue(2) + 0.05, EASE_IN_OUT);
+  const g = mode === 'gunung';
+  const aOut = g ? 1 : ramp(t, cue(1) - 0.35, cue(1) + 0.05, EASE_IN_OUT);
+  const bOut = g ? 1 : 0;
+  const c2 = g ? cue(0) - 0.3 : 0;
   // ── A: timbangan 1 cm³ air vs es
   const card = ramp(t, cue(0) + 0.3, cue(0) + 1.3);
   const load = ramp(t, cue(0) + 1.0, cue(0) + 2.4, EASE_IN_OUT);
@@ -65,17 +68,17 @@ export const Angka: React.FC = () => {
   const rx = bx + arm * Math.cos(rad);
   const ry = by - 20 - arm * Math.sin(rad);
   // ── B: es dilepas dari dasar gelas, naik dan mengapung
-  const rise = ramp(t, cue(1) + 0.8, cue(1) + 2.6, EASE_IN_OUT);
+  const rise = ramp(t, cue(1) + 0.1, cue(1) + 1.6, EASE_IN_OUT);
   const G = {x: 960, y: 860, w: 360, h: 520, level: 0.78};
   const surf = G.y - G.h * G.level;
   const iceY = mix(G.y - 70, surf + 40, rise) + (rise > 0.99 ? 0 : 0) + 4 * Math.sin(t * 1.7) * rise;
   // ── C: gunung es
-  const camC = drift(t - cue(2), dur - cue(2), {s: 1.05, x: 0, y: -60}, {s: 1.0, x: 0, y: 60});
+  const camC = drift(t - c2, dur - c2, {s: 1.05, x: 0, y: -60}, {s: 1.0, x: 0, y: 60});
   const bob = 4 * Math.sin(t * 1.1);
   const berg = BERG.map(([x, y]) => `${960 + x},${y + BERG_DY + bob}`).join(' ');
   const bergTop = Math.min(...BERG.map((p) => p[1])) + BERG_DY + bob;
   const bergBot = Math.max(...BERG.map((p) => p[1])) + BERG_DY + bob;
-  const labC = ramp(t, cue(2) + 1.2, cue(2) + 2.0);
+  const labC = ramp(t, c2 + 1.4, c2 + 2.2);
   return (
     <AbsoluteFill>
       {/* A */}
@@ -133,12 +136,12 @@ export const Angka: React.FC = () => {
               <IceCube x={G.x} y={iceY} s={1.2} rot={6 * Math.sin(t * 1.3)} />
               <rect x={G.x - G.w} y={surf + 2 * Math.sin(t * 2.2)} width={G.w * 2} height={G.h} fill={C.water} opacity={0.35} />
             </Glass>
-            <g opacity={ramp(t, cue(1) + 0.8, cue(1) + 1.2) * (1 - ramp(t, cue(1) + 2.4, cue(1) + 2.9))}>
+            <g opacity={ramp(t, cue(1) + 0.1, cue(1) + 0.5) * (1 - ramp(t, cue(1) + 1.5, cue(1) + 2.0))}>
               <line x1={G.x + 120} y1={iceY + 60} x2={G.x + 120} y2={iceY - 70} stroke={C.green} strokeWidth={14} strokeLinecap="round" />
               <path d={`M${G.x + 98},${iceY - 52} L${G.x + 120},${iceY - 92} L${G.x + 142},${iceY - 52} Z`} fill={C.green} />
             </g>
-            <Tag x={1450} y={420} text="ρ es < ρ air" o={ramp(t, cue(1) + 0.3, cue(1) + 0.9)} size={46} />
-            <Tag x={1450} y={520} text="→ naik & mengapung" color={C.shirt2} o={ramp(t, cue(1) + 1.8, cue(1) + 2.4)} size={36} />
+            <Tag x={1450} y={420} text="ρ es < ρ air" o={ramp(t, cue(1) - 0.2, cue(1) + 0.4)} size={46} />
+            <Tag x={1450} y={520} text="→ naik & mengapung" color={C.shirt2} o={ramp(t, cue(1) + 1.0, cue(1) + 1.6)} size={36} />
           </Stage>
         </AbsoluteFill>
       ) : null}
@@ -165,3 +168,6 @@ export const Angka: React.FC = () => {
     </AbsoluteFill>
   );
 };
+
+export const Angka: React.FC = () => <AngkaScene mode="massa" />;
+export const Gunung: React.FC = () => <AngkaScene mode="gunung" />;

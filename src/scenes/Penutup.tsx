@@ -1,7 +1,7 @@
 import React from 'react';
 import {AbsoluteFill} from 'remotion';
 import {EASE_IN_OUT, mix, ramp} from '../anim';
-import {Glass, HBond, IceCube, Kid, Stage, WaterMol, Zoomer, drift} from '../components/flat';
+import {Bubble, Glass, HBond, IceCube, Kid, Stage, Tag, WaterMol, Zoomer, drift} from '../components/flat';
 import {Kitchen} from '../components/sets';
 import {useScene} from '../SceneContext';
 import {C, FONT} from '../theme';
@@ -18,10 +18,12 @@ const RING = Array.from({length: 6}, (_, i) => {
   return {x, y, h1, h2: h1 - 104.5};
 });
 
-export const Penutup: React.FC = () => {
-  const {t, cue, cueEnd, dur} = useScene();
+export const Tutup: React.FC = () => {
+  const {t, cue, cueEnd, dur, wordOf} = useScene();
   const cam = drift(t, dur, {s: 1.02, x: -20, y: 0}, {s: 1.12, x: 60, y: -10});
-  const zoomP = ramp(t, cue(1) + 0.2, cue(1) + 0.9);
+  const zoomP = ramp(t, wordOf(0, 'molekul') - 0.3, wordOf(0, 'molekul') + 0.4) * (1 - ramp(t, cue(1) - 0.3, cue(1) + 0.1));
+  const ask = ramp(t, wordOf(1, 'pipa') - 0.3, wordOf(1, 'pipa') + 0.2);
+  const komen = ramp(t, wordOf(1, 'komentar') - 0.3, wordOf(1, 'komentar') + 0.3);
   const brand = ramp(t, cueEnd(1) + 0.4, cueEnd(1) + 1.2);
   const lift = ramp(t, cue(0) + 0.4, cue(0) + 1.4, EASE_IN_OUT);
   const cupX = 940;
@@ -32,7 +34,7 @@ export const Penutup: React.FC = () => {
         <Kitchen
           cam={cam}
           t={t}
-          mid={<Kid x={720} y={1010} s={1.3} t={t} look={0.5} face={{happy: 1}} armL={12} armR={mix(10, 40, lift)} phase={1.2} />}
+          mid={<Kid x={720} y={1010} s={1.3} t={t} look={0.5} face={{happy: 1 - ask, think: ask}} armL={mix(12, 30, ask)} armR={mix(10, 40, lift)} phase={1.2} />}
         >
           <Glass id="tutup" x={cupX} y={cupY + 62} w={190} h={240} level={0.7} t={t}>
             <IceCube x={cupX - 20} y={cupY + 62 - 240 * 0.7 + 22 + 3 * Math.sin(t * 1.8)} s={0.6} rot={-10 + 4 * Math.sin(t * 1.3)} />
@@ -53,6 +55,8 @@ export const Penutup: React.FC = () => {
             <WaterMol key={i} x={m.x} y={m.y + 3 * Math.sin(t * 2 + i)} r={30} rot={m.h1} t={t} phase={i * 0.4} happy={1} hAngles={[m.h1, m.h2]} />
           ))}
         </Zoomer>
+        <Bubble x={1340} y={330} text={'KENAPA PIPA AIR\nBISA PECAH?'} p={ask} tail="left" w={520} size={50} />
+        <Tag x={1340} y={520} text="tulis jawabanmu di komentar ↓" color={C.shirt2} o={komen} size={36} />
       </Stage>
       {/* penanda kanal */}
       <AbsoluteFill style={{justifyContent: 'flex-start', alignItems: 'center', paddingTop: 70, opacity: brand}}>

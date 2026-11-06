@@ -31,8 +31,8 @@ const Thermo: React.FC<{x: number; y: number; temp: number}> = ({x, y, temp}) =>
   );
 };
 
-export const Beku: React.FC = () => {
-  const {t, cue} = useScene();
+export const Dansa: React.FC = () => {
+  const {t, cue, wordOf} = useScene();
   // membeku: gerak melambat lalu molekul berpindah ke kisi segi enam
   const cool = ramp(t, cue(0) + 0.2, cue(0) + 3.0, EASE_IN_OUT);
   const p = ramp(t, cue(0) + 1.2, cue(1) + 0.4, EASE_IN_OUT);
@@ -54,10 +54,10 @@ export const Beku: React.FC = () => {
     };
   });
   const bondO = ramp(t, cue(0) + 3.2, cue(1) + 0.8);
-  const ringP = ramp(t, cue(1) + 0.8, cue(1) + 1.6);
+  const ringP = ramp(t, cue(1) + 0.3, cue(1) + 1.0);
   const ring = HEX_CENTERS.reduce((b, c) => (Math.hypot(c.x - CX, c.y - CY) < Math.hypot(b.x - CX, b.y - CY) ? c : b), HEX_CENTERS[0]);
-  const holes = ramp(t, cue(2) + 0.4, cue(2) + 1.2);
-  const boxes = ramp(t, cue(2) + 2.2, cue(2) + 3.0);
+  const holes = ramp(t, wordOf(1, 'ruang') - 0.2, wordOf(1, 'ruang') + 0.6);
+  const boxes = ramp(t, cue(2) + 0.6, cue(2) + 1.4);
   // kotak batas: cair (rapat) vs es (renggang)
   const xs = LATTICE.map((l) => l.x);
   const ys = LATTICE.map((l) => l.y);
@@ -101,7 +101,7 @@ export const Beku: React.FC = () => {
           <rect x={iceBox.x0} y={iceBox.y0} width={iceBox.x1 - iceBox.x0} height={iceBox.y1 - iceBox.y0} rx={24} fill="none" stroke={C.ink} strokeWidth={6} />
         </g>
         <Thermo x={170} y={760} temp={temp} />
-        <Tag x={960} y={70} text="ikatan hidrogen mengunci molekul" o={ramp(t, cue(0) + 3.4, cue(0) + 4.0) * (1 - ringP)} size={36} />
+        <Tag x={960} y={70} text="bergandengan rapi, seperti tari lingkaran" o={ramp(t, cue(0) + 3.0, cue(0) + 3.6) * (1 - ringP)} size={36} />
         <Tag x={ring.x} y={ring.y - LAT - 70} text="segi enam" o={ringP * (1 - holes)} color={C.orange} size={38} />
         <Tag x={960} y={70} text="banyak ruang kosong" o={holes * (1 - boxes)} size={38} />
         <Tag x={1700} y={iceBox.y0 + 40} text="es" o={boxes} size={36} />
