@@ -1,0 +1,25 @@
+es-00	Coba perhatikan es batu di minumanmu.
+es-01	Dicemplungkan, tenggelam sebentar, lalu muncul lagi dan mengapung.
+aneh-00	Kelihatannya biasa. Padahal, ini aneh banget.
+aneh-01	Hampir semua zat, kalau membeku, jadi lebih padat dan tenggelam di cairannya sendiri. Lilin begitu.
+aneh-02	Air? Malah kebalikannya.
+andai-00	Sekarang bayangkan kalau es itu tenggelam.
+andai-01	Setiap musim dingin, es akan menumpuk dari dasar danau, lapis demi lapis.
+andai-02	Lama-lama seluruh danau membeku padat, dan ikan-ikan tidak punya tempat lagi.
+kenalan-00	Untungnya, air punya rahasia. Kenalan dulu dengan molekulnya.
+kenalan-01	Satu oksigen, dua hidrogen, bentuknya seperti huruf fe.
+kenalan-02	Ujung oksigennya sedikit negatif, ujung hidrogennya sedikit positif. Jadi mereka suka tarik-tarikan.
+konser-00	Di air cair, molekul-molekul ini seperti penonton konser.
+konser-01	Desak-desakan, gandengan sebentar, lalu lepas lagi.
+dansa-00	Begitu dingin, mereka berhenti berdesakan, lalu bergandengan rapi, seperti tari lingkaran.
+dansa-01	Pola gandengannya segi enam, dan di tengahnya tersisa ruang kosong.
+dansa-02	Hasilnya, es memakan tempat kira-kira sembilan persen lebih banyak daripada air.
+botol-00	Buktinya gampang. Isi botol kaca sampai penuh, lalu masukkan ke freezer.
+botol-01	Esnya mengembang, dan botolnya bisa retak.
+angka-00	Karena lebih mengembang, es jadi lebih ringan untuk ukuran yang sama: sekitar nol koma sembilan dua gram per sentimeter kubik, sedangkan air sekitar satu.
+angka-01	Yang lebih ringan, naik ke atas.
+gunung-00	Tapi bedanya tipis. Jadi kira-kira sembilan per sepuluh gunung es tetap tersembunyi di bawah air.
+selamat-00	Kembali ke danau tadi. Karena es mengapung, danau membeku dari atas, dan esnya jadi selimut.
+selamat-01	Di bawahnya, air tetap cair, sekitar empat derajat Selsius, dan ikan aman sampai musim semi.
+tutup-00	Jadi, es yang mengapung di gelasmu itu sebenarnya jutaan molekul yang sedang bergandengan tangan.
+tutup-01	Nah, coba tebak: kenapa pipa air di negara dingin bisa pecah saat musim dingin? Tulis jawabanmu di kolom komentar!
